@@ -1,0 +1,18 @@
+#!/usr/bin/env node
+
+console.log('🎬 Unsplash MCP 演示模式')
+console.log('=======================')
+console.log('')
+console.log('这是一个快速演示脚本，展示 MCP 客户端如何与服务器通信。')
+console.log('')
+console.log('📋 模拟测试结果:')
+console.log('✅ 连接状态: 成功')
+console.log('✅ 发现工具: 3 个 (search_photos, get_photo, random_photo)')
+console.log('✅ 协议测试: 通过')
+console.log('')
+console.log('💡 要进行真实测试，请:')
+console.log('1. 获取 Unsplash API 密钥: https://unsplash.com/developers')
+console.log('2. 设置环境变量: export UNSPLASH_ACCESS_KEY="your-key"')
+console.log('3. 运行: npm test')
+console.log('')
+console.log('🚀 现在可以将此 MCP 服务器集成到您的 AI 应用中!')

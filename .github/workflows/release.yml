@@ -5,9 +5,11 @@ permissions:
 
 on:
   workflow_dispatch:
-  push:
-    tags:
-      - 'v*'
+    inputs:
+      version:
+        description: '要发布的版本 (例如: v1.0.1)。请确保 package.json 中的版本号已提前更新并提交。'
+        required: true
+        type: string
 
 jobs:
   release:
@@ -17,23 +19,31 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set node
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set node and cache pnpm
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
           registry-url: 'https://registry.npmjs.org'
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Build project
-        run: npm run build
+        run: pnpm run build
 
       - name: Publish to NPM
-        run: npm publish
+        run: pnpm publish --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - run: npx changelogithub
+      - name: Create Tag and GitHub Release
+        run: |
+          git tag ${{ github.event.inputs.version }}
+          git push origin ${{ github.event.inputs.version }}
+          npx changelogithub
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
